@@ -1,0 +1,362 @@
+<!-- HOME PAGE FULL CODE  -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RM PRODUCTION</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --orange: #f97316;
+            --black: #050505;
+            --gray-900: #111827;
+            --gray-800: #1f2937;
+            --gray-400: #9ca3af;
+            --white: #ffffff;
+            --accent-glow: rgba(249, 115, 22, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--black);
+            color: var(--white);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- New: Background Canvas --- */
+        #bgCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, #111 0%, #000 100%);
+        }
+
+        /* --- Navigation --- */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            background: linear-gradient(to right, #fff, var(--orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: letter-spacing 0.5s ease;
+        }
+        
+        .logo:hover {
+            letter-spacing: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            color: var(--gray-400);
+            text-decoration: none;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--orange);
+            text-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, transparent 0%, var(--black) 90%);
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .card-stack {
+            position: relative;
+            width: 320px;
+            height: 450px;
+            z-index: 20;
+        }
+
+        .hero-card {
+            position: absolute;
+            width: 320px;
+            height: 450px;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 50px 100px -20px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* --- Service Cards Enhancement --- */
+        .service-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            padding: 3.5rem 2rem;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-align: center;
+        }
+
+        .service-card:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: var(--orange);
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .service-card i {
+            background: rgba(249, 115, 22, 0.1);
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            color: var(--orange);
+        }
+
+        /* --- Section Styling --- */
+        section {
+            padding: 10rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .section-tag {
+            color: var(--orange);
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 5px;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease-out;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Mobile Fixes */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .section-title { font-size: 2.5rem; }
+            .services-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="bgCanvas"></canvas>
+
+    <nav>
+        <div class="nav-container">
+            <div class="logo">RM</div>
+            <div class="nav-links">
+                <a href="#hero">WORK</a>
+                <a href="#about">STUDIO</a>
+                <a href="#gallery">GALLERY</a>
+                <a href="#services">SERVICES</a>
+            </div>
+            <button class="book-btn" style="background: var(--orange); color: white; border: none; padding: 0.7rem 1.8rem; border-radius: 50px; cursor: pointer; font-weight: 700; font-size: 0.7rem; letter-spacing: 1px;">GET IN TOUCH</button>
+        </div>
+    </nav>
+
+    <section id="hero" class="hero">
+        <div class="hero-overlay"></div>
+        <div class="card-stack" id="heroStack"></div>
+    </section>
+
+    <section id="services">
+        <div style="text-align: center; margin-bottom: 5rem;" class="reveal">
+            <span class="section-tag">SPECIALTIES</span>
+            <h2 style="font-size: 3.5rem; font-weight: 200;">Our Expertise</h2>
+        </div>
+        <div class="services-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;">
+            <div class="service-card reveal">
+                <i data-lucide="camera"></i>
+                <h3>Landscape</h3>
+                <p style="color: var(--gray-400); margin-top: 1rem;">Nature in its purest, most cinematic form.</p>
+            </div>
+            <div class="service-card reveal">
+                <i data-lucide="image"></i>
+                <h3>Portraits</h3>
+                <p style="color: var(--gray-400); margin-top: 1rem;">Soulful imagery that tells a human story.</p>
+            </div>
+            <div class="service-card reveal">
+                <i data-lucide="zap"></i>
+                <h3>Motion</h3>
+                <p style="color: var(--gray-400); margin-top: 1rem;">Dynamic video production for the modern era.</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // --- 1. Background Animation Logic ---
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: null, y: null };
+
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = `rgba(249, 115, 22, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function createParticles() {
+            particles = [];
+            for (let i = 0; i < 100; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', initCanvas);
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+        });
+
+        initCanvas();
+        createParticles();
+        animate();
+
+        // --- 2. Hero Stack Logic (Enhanced) ---
+        const photos = [
+            { url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&fit=crop', title: 'ALPS', loc: 'Switzerland' },
+            { url: 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800&fit=crop', title: 'FJORD', loc: 'Norway' },
+            { url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&fit=crop', title: 'PEAKS', loc: 'Italy' },
+            { url: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&fit=crop', title: 'REEF', loc: 'Maldives' },
+            { url: 'https://images.unsplash.com/photo-1511593358241-7eea1f3c84e5?w=800&fit=crop', title: 'MIST', loc: 'Oregon' }
+        ];
+
+        const heroStack = document.getElementById('heroStack');
+        photos.forEach((photo, i) => {
+            const card = document.createElement('div');
+            card.className = `hero-card`;
+            card.innerHTML = `
+                <img src="${photo.url}" style="width:100%; height:100%; object-fit:cover;" alt="${photo.title}">
+                <div style="position:absolute; bottom:0; padding:2rem; background:linear-gradient(transparent, rgba(0,0,0,0.9)); width:100%;">
+                    <h1 style="font-size:1.5rem; letter-spacing:2px;">${photo.title}</h1>
+                </div>
+            `;
+            heroStack.appendChild(card);
+        });
+
+        function handleScroll() {
+            const scrollY = window.scrollY;
+            const cards = document.querySelectorAll('.hero-card');
+            
+            cards.forEach((card, i) => {
+                const offset = i - 2;
+                const rotate = (offset * 10) + (scrollY * 0.05 * offset);
+                const tx = (offset * 130) - (scrollY * 0.2 * offset);
+                const opacity = 1 - Math.abs(offset) * 0.3;
+                
+                card.style.transform = `translateX(${tx}px) rotate(${rotate}deg)`;
+                card.style.opacity = opacity;
+                card.style.zIndex = 10 - Math.abs(offset);
+            });
+
+            document.querySelectorAll('.reveal').forEach(el => {
+                if (el.getBoundingClientRect().top < window.innerHeight * 0.85) {
+                    el.classList.add('visible');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('load', () => {
+            lucide.createIcons();
+            handleScroll();
+        });
+    </script>
+</body>
+</html>
