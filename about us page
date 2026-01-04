@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Studio RM</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --orange: #f97316;
+            --black: #050505;
+            --gray-900: #111827;
+            --gray-800: #1f2937;
+            --gray-400: #9ca3af;
+            --white: #ffffff;
+            --accent-glow: rgba(249, 115, 22, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--black);
+            color: var(--white);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- Background Canvas --- */
+        #bgCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, #111 0%, #000 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 120px 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* --- Header styling --- */
+        .about-header {
+            margin-bottom: 6rem;
+            text-align: left;
+            border-left: 2px solid var(--orange);
+            padding-left: 25px;
+        }
+
+        .about-header h1 {
+            font-size: 3.5rem;
+            font-weight: 200;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+        }
+
+        .section-tag {
+            color: var(--orange);
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 5px;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- Timeline Cards with Entrance Animation --- */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateX(-50px) translateY(30px) skewX(-6deg);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) translateY(0) skewX(-6deg);
+            }
+        }
+
+        .timeline-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 8rem;
+        }
+
+        .timeline-card {
+            position: relative;
+            width: 320px;
+            height: 500px;
+            background: var(--gray-900);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+            border-radius: 12px;
+            transform: skewX(-6deg);
+            opacity: 0;
+            animation: slideInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            box-shadow: 0 30px 60px -12px rgba(0,0,0,0.5);
+        }
+
+        /* Stagger effect */
+        .timeline-card:nth-child(1) { animation-delay: 0.1s; }
+        .timeline-card:nth-child(2) { animation-delay: 0.3s; margin-top: -40px; }
+        .timeline-card:nth-child(3) { animation-delay: 0.5s; }
+
+        .timeline-card img {
+            width: 150%;
+            height: 100%;
+            object-fit: cover;
+            transform: skewX(6deg) translateX(-15%);
+            filter: grayscale(30%) brightness(0.6);
+            transition: 0.6s ease;
+        }
+
+        .timeline-card:hover img {
+            filter: grayscale(0%) brightness(0.9);
+            transform: skewX(6deg) translateX(-10%) scale(1.05);
+        }
+
+        .timeline-card:hover {
+            border-color: var(--orange);
+            box-shadow: 0 0 40px var(--accent-glow);
+        }
+
+        .card-label {
+            position: absolute;
+            bottom: 40px;
+            left: 30px;
+            transform: skewX(6deg);
+        }
+
+        .card-label span {
+            color: var(--orange);
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+        }
+
+        .card-label h2 {
+            font-size: 2.2rem;
+            font-weight: 200;
+            text-transform: uppercase;
+        }
+
+        /* --- Bio Section (Glassmorphism) --- */
+        .bio-box {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 5rem 3rem;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s ease;
+        }
+
+        .bio-box.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .bio-box h3 {
+            font-size: 2.8rem;
+            font-weight: 200;
+            margin-bottom: 2rem;
+            background: linear-gradient(to right, #fff, var(--orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .bio-box p {
+            color: var(--gray-400);
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .orange-text { color: var(--orange); font-weight: 600; }
+
+        /* --- Mobile --- */
+        @media (max-width: 850px) {
+            .timeline-grid { flex-direction: column; align-items: center; }
+            .timeline-card { width: 100%; height: 350px; transform: none !important; margin-top: 0 !important; }
+            .timeline-card img, .card-label { transform: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="bgCanvas"></canvas>
+
+    <div class="container">
+        <header class="about-header">
+            <span class="section-tag">WHO WE ARE</span>
+            <h1>The Story Behind<br>The Lens</h1>
+        </header>
+
+        <div class="timeline-grid">
+            <div class="timeline-card">
+                <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1000" alt="Inicios">
+                <div class="card-label">
+                    <!--<span></span>
+                    <h2>INICIOS</h2>-->
+                </div>
+            </div>
+
+            <div class="timeline-card">
+                <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?q=80&w=1000" alt="Recuerdos">
+                <div class="card-label">
+                    <!-- <span>CHAPTER II</span>
+                    <h2>RECUERDOS</h2>-->
+                </div>
+            </div>
+
+            <div class="timeline-card">
+                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1000" alt="Venganza">
+                <div class="card-label">
+                    <!-- <span>CHAPTER III</span>
+                    <h2>VENGANZA</h2>-->
+                </div>
+            </div>
+        </div>
+
+        <div class="bio-box" id="bioBox">
+            <i data-lucide="camera" style="color: var(--orange); margin-bottom: 1.5rem; width: 50px; height: 50px;"></i>
+            <h3>The Art of the Timeline</h3>
+            <p>
+                Established in the heart of the digital era, <span class="orange-text">RM Studio</span> has always sought to bridge the gap between classic photography and modern cinematic aesthetics.
+            </p>
+            <p>
+                Our philosophy is simple: <span class="white-text">Every great photo is an act of storytelling.</span> Whether we are exploring our <b>Inicios</b>, preserving your <b>Recuerdos</b>, or executing our creative <b>Venganza</b> against the status quo, we bring a sharp, high-contrast edge to everything we do.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // 1. Background Animation (Particles)
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function init() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            for(let i=0; i<60; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2,
+                    speedX: (Math.random() - 0.5) * 0.5,
+                    speedY: (Math.random() - 0.5) * 0.5
+                });
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0,0, canvas.width, canvas.height);
+            ctx.fillStyle = "rgba(249, 115, 22, 0.3)";
+            particles.forEach(p => {
+                p.x += p.speedX;
+                p.y += p.speedY;
+                if(p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+                if(p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+                ctx.fill();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        // 2. Reveal Bio on Scroll
+        const bioBox = document.getElementById('bioBox');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    bioBox.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.3 });
+
+        observer.observe(bioBox);
+
+        init();
+        animate();
+        lucide.createIcons();
+    </script>
+</body>
+</html>
